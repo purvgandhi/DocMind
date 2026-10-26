@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 480" width="380" height="480">
+  <defs>
+    <!-- Main Red Gradient -->
+    <linearGradient id="pdfBodyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#C7363D"/>
+      <stop offset="100%" stop-color="#A5262D"/>
+    </linearGradient>
+
+    <!-- Fold Flap Gradient -->
+    <linearGradient id="pdfFlapGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#E26D73"/>
+      <stop offset="100%" stop-color="#F28E93"/>
+    </linearGradient>
+
+    <!-- Ambient Red Glow Filter -->
+    <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="18" stdDeviation="24" flood-color="#B83A42" flood-opacity="0.38"/>
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#000000" flood-opacity="0.35"/>
+    </filter>
+
+    <!-- Fold Shadow -->
+    <filter id="foldShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="-4" dy="6" stdDeviation="5" flood-color="#4A0E13" flood-opacity="0.45"/>
+    </filter>
+  </defs>
+
+  <g filter="url(#softGlow)">
+    <!-- Main Document Shape with top-right corner cut for the fold -->
+    <!-- Path: Start top-left (rounded), go to top-right fold start (x=275, y=10), cut to (x=370, y=105), down to bottom-right (rounded), bottom-left (rounded), back to top -->
+    <path d="
+      M 45 10
+      L 270 10
+      L 370 110
+      L 370 435
+      A 35 35 0 0 1 335 470
+      L 45 470
+      A 35 35 0 0 1 10 435
+      L 10 45
+      A 35 35 0 0 1 45 10
+      Z
+    " fill="url(#pdfBodyGrad)" />
+
+    <!-- Subtle inner highlight line along top and left edge -->
+    <path d="
+      M 45 12
+      L 268 12
+      M 12 45
+      L 12 435
+    " stroke="rgba(255, 255, 255, 0.22)" stroke-width="2.5" stroke-linecap="round" fill="none" />
+
+    <!-- Folded Dog-Ear Flap in Top Right -->
+    <g filter="url(#foldShadow)">
+      <!-- Triangle flap with rounded tip on fold corner -->
+      <path d="
+        M 270 10
+        L 270 95
+        A 15 15 0 0 0 285 110
+        L 370 110
+        Z
+      " fill="url(#pdfFlapGrad)" />
+    </g>
+
+    <!-- Flap highlight edge -->
+    <path d="
+      M 270 10
+      L 370 110
+    " stroke="rgba(0, 0, 0, 0.15)" stroke-width="2" fill="none" />
+
+    <!-- "PDF" Text -->
+    <text x="190" y="325"
+          text-anchor="middle"
+          fill="#FFFFFF"
+          font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Inter', sans-serif"
+          font-weight="800"
+          font-size="94"
+          letter-spacing="2">PDF</text>
+  </g>
+</svg>

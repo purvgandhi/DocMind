@@ -1,0 +1,1 @@
+# DocMind Python Application Package

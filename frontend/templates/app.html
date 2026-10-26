@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DocMind Studio — AI Document Intelligence & Neural Workspace</title>
+  
+  <link rel="icon" type="image/svg+xml" href="/static/assets/favicon.svg">
+  
+  <!-- Fonts: Plus Jakarta Sans & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Prevent Theme Flash -->
+  <script>
+    (function() {
+      const savedTheme = localStorage.getItem('docmind_theme');
+      if (savedTheme) {
+        document.documentElement.setAttribute('data-theme', savedTheme);
+      } else {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
+    })();
+  </script>
+
+  <style>
+    /* ========================================================================= */
+    /* DOCMIND DESIGN SYSTEM — BLACK, CHARCOAL & MUTED RED                      */
+    /* ========================================================================= */
+    :root {
+      /* DARK MODE: Black, Charcoal-Grey, and Muted-Red */
+      --bg-main: #17191C;
+      --surface-primary: #1D2024;      /* Sidebar and header */
+      --surface-secondary: #24272C;    /* Cards and panels */
+      --surface-tertiary: #2D3136;     /* Elevated surfaces */
+      --surface-card: #24272C;
+      --border-color: #41464D;
+      --border-hover: rgba(184, 58, 66, 0.55);
+      
+      --primary-accent: #B83A42;
+      --primary-hover: #D6535B;
+      --dark-red: #862B32;
+      
+      --text-primary: #F2F3F4;
+      --text-secondary: #A8ADB3;
+      --text-muted: #6C737A;
+      
+      /* Pure red/charcoal semantic aliases (all blue/teal eliminated) */
+      --primary-teal: #B83A42;
+      --deep-teal: #862B32;
+      --cyan-accent: #B83A42;
+      --cyan-glow: rgba(184, 58, 66, 0.28);
+      
+      --success: #3EB489;
+      --error: #D6535B;
+      --card-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.5);
+      --header-bg: #1D2024;
+      --facet-opacity: 0.14;
+      --radar-bg: #1D2024;
+      --radar-grid: rgba(65, 70, 77, 0.35);
+      --code-bg: #1D2024;
+    }
+
+    [data-theme="light"] {
+      /* LIGHT MODE: Coordinated Light Grey + Restrained Red Accents */
+      --bg-main: #F2F3F5;
+      --surface-primary: #FFFFFF;
+      --surface-secondary: #E8EAED;
+      --surface-tertiary: #DDE1E5;
+      --surface-card: #FFFFFF;
+      --border-color: #D1D5DB;
+      --border-hover: rgba(184, 58, 66, 0.5);
+      
+      --primary-accent: #B83A42;
+      --primary-hover: #A02D35;
+      --dark-red: #862B32;
+      
+      --text-primary: #111315;
+      --text-secondary: #5F6368;
+      --text-muted: #80868B;
+      
+      --primary-teal: #B83A42;
+      --deep-teal: #862B32;
+      --cyan-accent: #B83A42;
+      --cyan-glow: rgba(184, 58, 66, 0.2);
+      
+      --success: #2E8575;
+      --error: #B83A42;
+      --card-shadow: 0 4px 18px -2px rgba(17, 19, 21, 0.08);
+      --header-bg: #FFFFFF;
+      --facet-opacity: 0.10;
+      --radar-bg: #E8EAED;
+      --radar-grid: rgba(209, 213, 219, 0.8);
+      --code-bg: #E8EAED;
+    }
+
+    html, body {
+      height: 100%;
+      height: 100dvh;
+      overflow: hidden;
+      margin: 0;
+      padding: 0;
+      background-color: var(--bg-main);
+      color: var(--text-primary);
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--surface-secondary);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--border-color);
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--primary-accent);
+    }
+
+    /* Original Geometric Facet Mesh Background Layer */
+    .facet-mesh-bg {
+      position: relative;
+    }
+    .facet-mesh-bg::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url('/static/assets/arctic-facet-mesh.svg');
+      background-size: cover;
+      background-position: center;
+      opacity: var(--facet-opacity);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Tactile Facet Mix (Unified with SVG Mesh) */
+    .texture-mix {
+      position: relative;
+      overflow: hidden;
+    }
+    .texture-mix::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url('/static/assets/arctic-facet-mesh.svg');
+      background-size: cover;
+      background-position: center;
+      opacity: var(--facet-opacity);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Arctic Facet Card */
+    .arctic-card, .facet-card {
+      background-color: var(--surface-card);
+      border: 1px solid var(--border-color);
+      box-shadow: var(--card-shadow);
+      transition: all 0.25s ease;
+    }
+    .arctic-card:hover, .facet-card:hover {
+      border-color: var(--border-hover);
+    }
+
+    /* ========================================================================= */
+    /* DOCMIND BUTTON SYSTEM (PRIMARY RED & SECONDARY GRAPHITE)                  */
+    /* ========================================================================= */
+    
+    /* Primary Action Buttons: Restrained dark-red gradient, white text, subtle border, soft red shadow */
+    .btn-primary, .btn-primary-red, .btn-facet, .btn-teal {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #B83A42 0%, #862B32 100%);
+      color: #FFFFFF !important;
+      font-weight: 700;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 0.75rem;
+      box-shadow: 0 4px 14px -2px rgba(184, 58, 66, 0.38);
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      user-select: none;
+    }
+
+    /* Hover: Lift 2px, slightly brighten gradient, strengthen shadow subtly */
+    .btn-primary:hover, .btn-primary-red:hover, .btn-facet:hover, .btn-teal:hover {
+      background: linear-gradient(135deg, #D6535B 0%, #B83A42 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px -2px rgba(214, 83, 91, 0.45);
+      border-color: rgba(255, 255, 255, 0.30);
+      color: #FFFFFF !important;
+    }
+
+    /* Click: Quick press animation with slight scale reduction */
+    .btn-primary:active, .btn-primary-red:active, .btn-facet:active, .btn-teal:active {
+      transform: translateY(0px) scale(0.97);
+      box-shadow: 0 2px 6px -1px rgba(184, 58, 66, 0.35);
+      transition-duration: 0.08s;
+    }
+
+    /* Focus: Clear, accessible focus ring */
+    .btn-primary:focus-visible, .btn-primary-red:focus-visible, .btn-facet:focus-visible, .btn-teal:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(184, 58, 66, 0.45), 0 4px 14px -2px rgba(184, 58, 66, 0.38);
+    }
+
+    /* Secondary Action Buttons: Graphite background #24272C, thin grey border #41464D, soft off-white text #F2F3F4 */
+    .btn-secondary, .btn-secondary-graphite {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--surface-secondary);
+      color: var(--text-primary) !important;
+      font-weight: 600;
+      border: 1px solid var(--border-color);
+      border-radius: 0.75rem;
+      box-shadow: 0 2px 8px -2px rgba(0, 0, 0, 0.30);
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+      user-select: none;
+    }
+
+    /* Secondary Hover: Brighten slightly, lift 2px, strengthen shadow */
+    .btn-secondary:hover, .btn-secondary-graphite:hover {
+      background-color: var(--surface-tertiary);
+      border-color: #5A606A;
+      color: #FFFFFF !important;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.40);
+    }
+
+    /* Secondary Click: Quick press animation */
+    .btn-secondary:active, .btn-secondary-graphite:active {
+      transform: translateY(0px) scale(0.97);
+      box-shadow: 0 1px 4px -1px rgba(0, 0, 0, 0.3);
+      transition-duration: 0.08s;
+    }
+
+    /* Secondary Focus: Clear focus ring */
+    .btn-secondary:focus-visible, .btn-secondary-graphite:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(184, 58, 66, 0.35);
+    }
+
+    /* Active Navigation Pill: Muted red gradient with soft red shadow */
+    .tab-active {
+      background: linear-gradient(135deg, #B83A42 0%, #862B32 100%) !important;
+      color: #FFFFFF !important;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      box-shadow: 0 3px 12px -2px rgba(184, 58, 66, 0.35);
+    }
+      color: #FFFFFF !important;
+      border: 1px solid rgba(255, 255, 255, 0.20);
+      box-shadow: 0 3px 12px -2px rgba(184, 58, 66, 0.35);
+    }
+
+    /* Living radar pulse */
+    @keyframes radarWave {
+      0% { transform: scale(0.92); opacity: 0.85; }
+      50% { transform: scale(1.35); opacity: 0.15; }
+      100% { transform: scale(0.92); opacity: 0.85; }
+    }
+    .radar-pulse {
+      animation: radarWave 3s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    }
+  </style>
+</head>
+<body class="h-screen w-screen overflow-hidden flex flex-col font-sans select-none antialiased">
+
+  <!-- ========================================================================= -->
+  <!-- FULL SCREEN APP SHELL (100dvh FLUID VIEWPORT) -->
+  <!-- ========================================================================= -->
+  <div class="h-full w-full flex overflow-hidden">
+
+    <!-- ======================================================================= -->
+    <!-- COLLAPSIBLE LEFT SIDEBAR (PHASE 5B) -->
+    <!-- ======================================================================= -->
+    <aside id="app-sidebar" class="w-16 lg:w-64 border-r border-[var(--border-color)] bg-[var(--surface-primary)] flex flex-col justify-between shrink-0 transition-all duration-300 z-30 select-none">
+      
+      <!-- Top Branding & Navigation -->
+      <div class="flex flex-col">
+        
+        <!-- Logo Header -->
+        <div class="h-16 px-4 flex items-center justify-between border-b border-[var(--border-color)]">
+          <a href="/" class="flex items-center space-x-2.5 group overflow-hidden" title="Return to Landing Page">
+            <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-[#87252C] to-[#B83A42] p-[1.5px] shadow-sm shrink-0">
+              <div class="w-full h-full rounded-[6.5px] flex items-center justify-center bg-[var(--surface-primary)]">
+                <i data-lucide="layers" class="w-4 h-4 text-[#B83A42]"></i>
+              </div>
+            </div>
+            <span class="hidden lg:block text-sm font-bold tracking-tight text-[var(--text-primary)]">DocMind</span>
+          </a>
+
+          <!-- Collapse / Expand Toggle Button -->
+          <button id="btn-toggle-sidebar" class="hidden lg:flex w-7 h-7 rounded-lg bg-[var(--surface-secondary)] border border-[var(--border-color)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] items-center justify-center transition-all" title="Toggle Sidebar">
+            <i data-lucide="chevron-left" id="sidebar-toggle-icon" class="w-4 h-4"></i>
+          </button>
+        </div>
+
+        <!-- Active Knowledge Scope Selector -->
+        <div class="p-3 border-b border-[var(--border-color)] hidden lg:block">
+          <label class="text-[10px] font-mono text-[var(--text-secondary)] uppercase tracking-wider block mb-1.5 flex items-center justify-between">
+            <span>Knowledge Scope</span>
+            <span id="scope-status-badge" class="text-[#B83A42] font-bold text-[9px]">Global (All)</span>
+          </label>
+          <select id="select-active-scope" class="w-full bg-[var(--surface-secondary)] border border-[var(--border-color)] rounded-lg px-2.5 py-1.5 text-xs text-[var(--text-primary)] focus:outline-none focus:border-[#B83A42] transition-all font-medium">
+            <option value="">All Indexed Documents (Global)</option>
+          </select>
+        </div>
+
+        <!-- Sidebar Navigation Items: Documents, Document Chat, Clause Search, Chunk Explorer -->
+        <nav class="p-2 space-y-1">
+          <button id="side-nav-chat" class="side-nav-btn w-full p-2.5 rounded-xl flex items-center space-x-3 text-xs font-semibold text-white bg-gradient-to-r from-[#B83A42] to-[#87252C] border border-white/10 shadow-xs transition-all group">
+            <i data-lucide="message-square" class="w-4 h-4 shrink-0"></i>
+            <span class="hidden lg:inline sidebar-label">Document Chat</span>
+          </button>
+
+          <button id="side-nav-docs" class="side-nav-btn w-full p-2.5 rounded-xl flex items-center space-x-3 text-xs font-semibold text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-secondary)] border border-transparent transition-all group">
+            <i data-lucide="folder-git-2" class="w-4 h-4 shrink-0"></i>
+            <span class="hidden lg:inline sidebar-label">Documents</span>
+          </button>
+
+          <button id="side-nav-search" class="side-nav-btn w-full p-2.5 rounded-xl flex items-center space-x-3 text-xs font-semibold text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-secondary)] border border-transparent transition-all group">
+            <i data-lucide="table-properties" class="w-4 h-4 shrink-0"></i>
+            <span class="hidden lg:inline sidebar-label">Clause Search</span>
+          </button>
+
+          <button id="side-nav-chunks" class="side-nav-btn w-full p-2.5 rounded-xl flex items-center space-x-3 text-xs font-semibold text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-secondary)] border border-transparent transition-all group">
+            <i data-lucide="layers" class="w-4 h-4 shrink-0"></i>
+            <span class="hidden lg:inline sidebar-label">Chunk Explorer</span>
+          </button>
+        </nav>
+
+      </div>
+
+    </aside>
+
+    <!-- ======================================================================= -->
+    <!-- MAIN WORKSPACE CONTAINER -->
+    <!-- ======================================================================= -->
+    <main class="flex-1 flex flex-col overflow-hidden bg-[var(--bg-main)] relative">
+      
+      <!-- TOP APPLICATION HEADER BAR (PHASE 5C) -->
+      <header class="h-16 px-6 border-b border-[var(--border-color)] bg-[var(--surface-primary)] flex items-center justify-between shrink-0 z-20">
+        
+        <!-- Left: Quick Tab Navigation Pills -->
+        <div class="flex items-center space-x-3">
+          <div class="flex items-center bg-[var(--surface-secondary)] border border-[var(--border-color)] rounded-full p-1 space-x-1">
+            <button id="tab-btn-chat" class="tab-btn px-4 py-1.5 rounded-full text-xs font-semibold tab-active transition-all flex items-center space-x-1.5">
+              <i data-lucide="message-square" class="w-3.5 h-3.5"></i>
+              <span>Document Chat</span>
+            </button>
+            <button id="tab-btn-docs" class="tab-btn px-4 py-1.5 rounded-full text-xs font-semibold text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-all flex items-center space-x-1.5">
+              <i data-lucide="folder-git-2" class="w-3.5 h-3.5"></i>
+              <span>Documents</span>
+            </button>
+            <button id="tab-btn-search" class="tab-btn px-4 py-1.5 rounded-full text-xs font-semibold text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-all flex items-center space-x-1.5">
+              <i data-lucide="table-properties" class="w-3.5 h-3.5"></i>
+              <span>Clause Search</span>
+            </button>
+            <button id="tab-btn-chunks" class="tab-btn px-4 py-1.5 rounded-full text-xs font-semibold text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-all flex items-center space-x-1.5">
+              <i data-lucide="layers" class="w-3.5 h-3.5"></i>
+              <span>Chunk Explorer</span>
+            </button>
+          </div>
+
+
+        </div>
+
+        <!-- Right: Theme Switcher, Refresh & Upload CTA -->
+        <div class="flex items-center space-x-3">
+          
+          <!-- Theme Switcher (Sun/Moon) -->
+          <button id="app-theme-toggle-btn" class="w-9 h-9 rounded-xl border border-[var(--border-color)] bg-[var(--surface-secondary)] text-[var(--text-primary)] hover:border-[var(--primary-accent)] flex items-center justify-center transition-all shadow-xs" title="Toggle Light / Dark Theme" aria-label="Toggle Theme">
+            <i data-lucide="sun" id="app-theme-sun" class="w-4 h-4 hidden"></i>
+            <i data-lucide="moon" id="app-theme-moon" class="w-4 h-4 hidden"></i>
+          </button>
+
+          <!-- Refresh -->
+          <button id="btn-global-refresh" class="w-9 h-9 rounded-xl bg-[var(--surface-secondary)] border border-[var(--border-color)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] flex items-center justify-center transition-all shadow-xs" title="Refresh Documents & Stats">
+            <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+          </button>
+
+          <!-- Upload PDF Modal Trigger -->
+          <button id="btn-open-upload" class="btn-primary px-4 py-2 rounded-xl text-xs font-bold flex items-center space-x-2">
+            <i data-lucide="upload-cloud" class="w-4 h-4"></i>
+            <span>Upload Document</span>
+          </button>
+        </div>
+
+      </header>
+
+      <!-- ===================================================================== -->
+      <!-- TOP METRIC & SEMANTIC VISUALIZATION ROW -->
+      <!-- ===================================================================== -->
+      <section class="px-6 pt-4 pb-3 shrink-0">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-3.5 items-stretch">
+          
+          <!-- 3 Simple Metrics: Indexed Documents, Chunks, Embedding Dimensions -->
+          <div class="lg:col-span-5 arctic-card rounded-xl p-4 flex items-center justify-around border border-[var(--border-color)]">
+            <div class="text-center px-2">
+              <div id="stat-total-docs" class="text-2xl font-bold text-[var(--text-primary)]">2</div>
+              <div class="text-xs text-[var(--text-secondary)] mt-0.5 font-medium">Indexed Documents</div>
+            </div>
+            <div class="h-9 w-px bg-[var(--border-color)]"></div>
+            <div class="text-center px-2">
+              <div id="stat-total-chunks" class="text-2xl font-bold text-[var(--primary-accent)]">12</div>
+              <div class="text-xs text-[var(--text-secondary)] mt-0.5 font-medium">Chunks</div>
+            </div>
+            <div class="h-9 w-px bg-[var(--border-color)]"></div>
+            <div class="text-center px-2">
+              <div class="text-2xl font-bold text-[var(--text-primary)] font-mono">384<span class="text-xs text-[var(--text-secondary)] font-sans">d</span></div>
+              <div class="text-xs text-[var(--text-secondary)] mt-0.5 font-medium">Embedding Dimensions</div>
+            </div>
+          </div>
+
+          <!-- Clean Semantic Visualization (No fake circles, no clutter) -->
+          <div class="lg:col-span-7 arctic-card rounded-xl p-3.5 flex flex-col justify-between border border-[var(--border-color)]">
+            <div class="flex items-center justify-between px-1 mb-1.5">
+              <div class="flex items-center space-x-2">
+                <span class="w-2 h-2 rounded-full bg-[var(--primary-accent)]"></span>
+                <span class="text-xs font-bold text-[var(--text-primary)]">Semantic Vector Map</span>
+              </div>
+              <span class="text-[11px] text-[var(--text-muted)] font-mono">2D Chunk Embedding Space</span>
+            </div>
+
+            <!-- Canvas Container -->
+            <div class="relative h-16 w-full rounded-lg overflow-hidden border border-[var(--border-color)]" style="background-color: var(--radar-bg);">
+              <canvas id="vector-radar-canvas" class="w-full h-full block cursor-crosshair"></canvas>
+              <!-- Tooltip Box -->
+              <div id="radar-tooltip" class="absolute hidden pointer-events-none bg-[var(--surface-primary)] border border-[var(--border-color)] rounded-lg p-2 text-[10px] text-[var(--text-primary)] shadow-md z-20 max-w-[200px] backdrop-blur-md"></div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ===================================================================== -->
+      <!-- MAIN WORKSPACE PANELS (FULL VIEWPORT, INDEPENDENT SCROLLING) -->
+      <!-- ===================================================================== -->
+      <!-- MAIN WORKSPACE PANELS (FULL VIEWPORT, INDEPENDENT SCROLLING) -->
+      <!-- ===================================================================== -->
+      <div class="flex-1 px-6 pb-4 overflow-hidden relative">
+
+        <!-- =================================================================== -->
+        <!-- VIEW 1: DOCUMENT CHAT STUDIO (PHASE 8) -->
+        <!-- =================================================================== -->
+        <section id="view-chat" class="h-full flex flex-col arctic-card rounded-2xl overflow-hidden">
+          
+          <div class="h-12 px-5 border-b border-[var(--border-color)] bg-[var(--surface-primary)] flex items-center justify-between shrink-0">
+            <div class="flex items-center space-x-2">
+              <i data-lucide="message-square" class="w-4 h-4 text-[var(--primary-accent)]"></i>
+              <span class="text-xs font-bold text-[var(--text-primary)]">Document Chat</span>
+            </div>
+            
+            <div class="flex items-center space-x-4 text-xs font-mono text-[var(--text-secondary)]">
+              <span id="chat-active-doc-label" class="text-[var(--text-secondary)] font-medium">All Indexed Documents</span>
+              <button id="btn-clear-chat" class="hover:text-[var(--text-primary)] flex items-center gap-1 transition-colors" title="Clear Chat History">
+                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                <span>Clear</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Messages Stream (Flex-1 scrollable) -->
+          <div id="chat-messages" class="flex-1 overflow-y-auto p-5 space-y-4">
+            
+            <!-- Empty Hero State -->
+            <div id="chat-hero-state" class="my-auto py-8 text-center max-w-lg mx-auto space-y-4">
+              <div class="w-14 h-14 mx-auto rounded-2xl bg-[var(--surface-secondary)] border border-[var(--border-color)] flex items-center justify-center text-[var(--primary-accent)] shadow-sm">
+                <i data-lucide="sparkles" class="w-7 h-7"></i>
+              </div>
+              <div>
+                <h3 class="text-base font-bold text-[var(--text-primary)]">Ask anything about your documents</h3>
+                <p class="text-xs text-[var(--text-secondary)] mt-1 max-w-sm mx-auto">
+                  Ask questions in plain English to get answers backed by direct citations from your indexed PDFs.
+                </p>
+              </div>
+
+              <!-- Suggested Query Prompts -->
+              <div class="pt-2 flex flex-col gap-2 text-left">
+                <button onclick="setChatInput('What is Dense Passage Retrieval (DPR) and how does it function?')" class="p-2.5 rounded-xl bg-[var(--surface-secondary)] hover:border-[var(--primary-accent)] border border-[var(--border-color)] text-xs text-[var(--text-primary)] transition-all flex items-center justify-between group">
+                  <span>What is Dense Passage Retrieval (DPR) and how does it function?</span>
+                  <i data-lucide="arrow-right" class="w-3.5 h-3.5 text-[var(--text-muted)] group-hover:text-[var(--primary-accent)] transition-colors"></i>
+                </button>
+                <button onclick="setChatInput('Explain the difference between RAG-Sequence and RAG-Token models.')" class="p-2.5 rounded-xl bg-[var(--surface-secondary)] hover:border-[var(--primary-accent)] border border-[var(--border-color)] text-xs text-[var(--text-primary)] transition-all flex items-center justify-between group">
+                  <span>Explain the difference between RAG-Sequence and RAG-Token models.</span>
+                  <i data-lucide="arrow-right" class="w-3.5 h-3.5 text-[var(--text-muted)] group-hover:text-[var(--primary-accent)] transition-colors"></i>
+                </button>
+                <button onclick="setChatInput('How does DocMind ensure zero hallucination in its citation pipeline?')" class="p-2.5 rounded-xl bg-[var(--surface-secondary)] hover:border-[var(--primary-accent)] border border-[var(--border-color)] text-xs text-[var(--text-primary)] transition-all flex items-center justify-between group">
+                  <span>How does DocMind ensure zero hallucination in its citation pipeline?</span>
+                  <i data-lucide="arrow-right" class="w-3.5 h-3.5 text-[var(--text-muted)] group-hover:text-[var(--primary-accent)] transition-colors"></i>
+                </button>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Bottom Composer Box (Never Clipped) -->
+          <div class="p-3 border-t border-[var(--border-color)] bg-[var(--surface-primary)] shrink-0">
+            <form id="chat-form" class="relative flex items-center">
+              <input 
+                id="chat-input"
+                type="text" 
+                placeholder="Ask a question about your indexed documents... (Enter to send)" 
+                class="w-full bg-[var(--surface-secondary)] border border-[var(--border-color)] rounded-xl pl-4 pr-24 py-3 text-xs sm:text-sm text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:outline-none focus:border-[var(--primary-accent)] transition-all font-medium"
+                autocomplete="off"
+              />
+              <button 
+                id="btn-chat-send"
+                type="submit" 
+                class="btn-primary absolute right-1.5 px-4 py-2 text-xs font-bold rounded-lg flex items-center space-x-1.5">
+                <span>Ask</span>
+                <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+              </button>
+            </form>
+          </div>
+
+        </section>
+
+        <!-- =================================================================== -->
+        <!-- VIEW 2: DOCUMENT LIBRARY & MANAGEMENT (PHASE 7) -->
+        <!-- =================================================================== -->
+        <section id="view-docs" class="h-full hidden flex flex-col arctic-card rounded-2xl overflow-hidden p-6 space-y-4">
+          
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[var(--border-color)]">
+            <div>
+              <h2 class="text-base font-bold text-[var(--text-primary)] flex items-center gap-2">
+                <i data-lucide="folder-git-2" class="w-5 h-5 text-[var(--primary-accent)]"></i>
+                <span>Document Repository & Knowledge Base</span>
+              </h2>
+              <p class="text-xs text-[var(--text-secondary)] mt-0.5">
+                Manage indexed PDF documents, inspect metadata, read document pages, and review vector segmentation.
+              </p>
+            </div>
+
+            <div class="flex items-center space-x-3">
+              <div class="relative">
+                <i data-lucide="search" class="w-3.5 h-3.5 text-[var(--text-muted)] absolute left-3 top-2.5"></i>
+                <input 
+                  id="doc-filter-input" 
+                  type="text" 
+                  placeholder="Filter documents..." 
+                  class="bg-[var(--surface-secondary)] border border-[var(--border-color)] rounded-lg pl-8 pr-3 py-1.5 text-xs text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:outline-none focus:border-[var(--primary-accent)] font-mono"
+                />
+              </div>
+              <button onclick="document.getElementById('btn-open-upload').click()" class="btn-primary px-3.5 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5">
+                <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+                <span>Add Document</span>
+              </button>
+            </div>
+          </div>
+
+          <div id="docs-table-container" class="flex-1 overflow-y-auto space-y-3 pr-1">
+            <!-- Dynamically populated document rows -->
+          </div>
+
+        </section>
+
+        <!-- =================================================================== -->
+        <!-- VIEW 3: SEMANTIC CLAUSE SEARCH -->
+        <!-- =================================================================== -->
+        <section id="view-search" class="h-full hidden flex flex-col arctic-card rounded-2xl overflow-hidden p-6 space-y-4">
+          
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[var(--border-color)]">
+            <div>
+              <h2 class="text-base font-bold text-[var(--text-primary)] flex items-center gap-2">
+                <i data-lucide="table-properties" class="w-5 h-5 text-[var(--primary-accent)]"></i>
+                <span>Semantic Clause & Fact Retrieval</span>
+              </h2>
+              <p class="text-xs text-[var(--text-secondary)] mt-0.5">
+                Query vector indices directly to surface verbatim clauses, cosine similarity scores, and relevance tracks.
+              </p>
+            </div>
+
+            <div class="flex items-center bg-[var(--surface-secondary)] border border-[var(--border-color)] rounded-full p-1 text-[11px] font-mono text-[var(--text-secondary)]">
+              <button class="px-3 py-1 rounded-full tab-active font-bold">All Chunks</button>
+              <button class="px-3 py-1 hover:text-[var(--text-primary)] transition-colors">Page 1</button>
+              <button class="px-3 py-1 hover:text-[var(--text-primary)] transition-colors">Page 2</button>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-3 items-center">
+            <div class="md:col-span-8 flex gap-2">
+              <input 
+                id="search-input" 
+                type="text" 
+                placeholder="Enter query, clause keywords, or concept..." 
+                class="flex-1 bg-[var(--surface-secondary)] border border-[var(--border-color)] rounded-xl px-4 py-2.5 text-xs text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:outline-none focus:border-[var(--primary-accent)] font-medium"
+              />
+              <button id="btn-exec-search" class="btn-primary px-5 py-2.5 rounded-xl text-xs font-bold flex items-center space-x-1.5">
+                <i data-lucide="search" class="w-3.5 h-3.5"></i>
+                <span>Search</span>
+              </button>
+            </div>
+
+            <div class="md:col-span-4 flex items-center justify-between text-xs text-[var(--text-secondary)] bg-[var(--surface-secondary)] px-4 py-2 rounded-xl border border-[var(--border-color)] font-mono">
+              <div class="flex items-center space-x-2">
+                <span>Top-k:</span>
+                <input id="search-topk" type="range" min="1" max="10" value="5" class="w-16 accent-[#B83A42]">
+                <span id="search-topk-val" class="text-[var(--text-primary)] font-bold">5</span>
+              </div>
+              <div class="flex items-center space-x-2">
+                <span>Min Sim:</span>
+                <input id="search-minsim" type="range" min="0" max="0.8" step="0.05" value="0.0" class="w-16 accent-[#862B32]">
+                <span id="search-minsim-val" class="text-[var(--text-primary)] font-bold">0.00</span>
+              </div>
+            </div>
+          </div>
+
+          <div id="search-results-list" class="flex-1 overflow-y-auto space-y-2 pr-1">
+            <div class="p-8 text-center text-xs text-[var(--text-muted)] font-mono">
+              Enter a search query to retrieve semantic matching passages.
+            </div>
+          </div>
+
+        </section>
+
+        <!-- =================================================================== -->
+        <!-- VIEW 4: CHUNK EXPLORER (PHASE 9B) -->
+        <!-- =================================================================== -->
+        <section id="view-chunks" class="h-full hidden flex flex-col arctic-card rounded-2xl overflow-hidden p-6 space-y-4">
+          
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[var(--border-color)]">
+            <div>
+              <h2 class="text-base font-bold text-[var(--text-primary)] flex items-center gap-2">
+                <i data-lucide="layers" class="w-5 h-5 text-[var(--primary-accent)]"></i>
+                <span>Document Chunks Inspector</span>
+              </h2>
+              <p class="text-xs text-[var(--text-secondary)] mt-0.5">
+                Inspect recursive 700-character segments with 100-character sliding overlaps and page mappings.
+              </p>
+            </div>
+
+            <div class="flex items-center space-x-2">
+              <span class="text-xs font-mono text-[var(--text-secondary)]">Document:</span>
+              <select id="chunks-doc-select" class="bg-[var(--surface-secondary)] border border-[var(--border-color)] rounded-lg px-3 py-1.5 text-xs text-[var(--text-primary)] focus:outline-none focus:border-[var(--primary-accent)] font-mono">
+                <option value="">Select Document...</option>
+              </select>
+            </div>
+          </div>
+
+          <div id="chunks-stream-container" class="flex-1 overflow-y-auto space-y-3 pr-1">
+            <div class="p-8 text-center text-xs text-[var(--text-muted)] font-mono">
+              Select a document to inspect all segmented chunks.
+            </div>
+          </div>
+
+        </section>
+
+      </div>
+
+    </main>
+
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL 1: UPLOAD DOCUMENT DIALOG -->
+  <!-- ========================================================================= -->
+  <div id="modal-upload" class="fixed inset-0 z-50 hidden bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="arctic-card texture-mix rounded-2xl w-full max-w-lg p-6 space-y-5 shadow-2xl relative">
+      <div class="relative z-10 space-y-5">
+        <button id="btn-close-upload" class="absolute top-0 right-0 text-[var(--text-muted)] hover:text-[var(--text-primary)] p-1 transition-colors">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+
+        <div class="space-y-1">
+          <h3 class="text-lg font-bold text-[var(--text-primary)] flex items-center gap-2">
+            <i data-lucide="upload-cloud" class="w-5 h-5 text-[var(--primary-accent)]"></i>
+            <span>Upload Document to Knowledge Base</span>
+          </h3>
+          <p class="text-xs text-[var(--text-secondary)]">
+            Upload PDF, TXT, or MD documents. DocMind will extract text, segment into recursive chunks, and generate 384-d vector embeddings locally.
+          </p>
+        </div>
+
+        <div id="drop-zone" class="border-2 border-dashed border-[var(--border-color)] hover:border-[var(--primary-accent)] rounded-2xl p-8 text-center bg-[var(--surface-secondary)] cursor-pointer transition-all space-y-3">
+          <input type="file" id="file-input" class="hidden" accept=".pdf,.txt,.md">
+          <div class="w-12 h-12 mx-auto rounded-xl bg-[var(--surface-primary)] text-[var(--primary-accent)] flex items-center justify-center shadow-xs">
+            <i data-lucide="file-up" class="w-6 h-6"></i>
+          </div>
+          <div>
+            <span class="text-xs font-semibold text-[var(--text-primary)]">Click to browse</span>
+            <span class="text-xs text-[var(--text-secondary)]"> or drag and drop your PDF here</span>
+          </div>
+          <p class="text-[10px] text-[var(--text-muted)] font-mono">Maximum file size: 50MB &bull; PDF, TXT, MD supported</p>
+        </div>
+
+        <div id="upload-status" class="hidden p-3 rounded-xl bg-[var(--surface-secondary)] border border-[var(--border-color)] text-xs font-mono text-[var(--text-secondary)] space-y-2">
+          <div class="flex items-center justify-between">
+            <span id="upload-filename" class="text-[var(--text-primary)] font-bold truncate">document.pdf</span>
+            <span id="upload-percent" class="text-[var(--primary-accent)] font-bold">Processing...</span>
+          </div>
+          <div class="w-full bg-[var(--border-color)] rounded-full h-1.5 overflow-hidden">
+            <div id="upload-progress-bar" class="h-full bg-gradient-to-r from-[#862B32] to-[#B83A42] rounded-full w-0 transition-all duration-300"></div>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-end space-x-3 pt-2 border-t border-[var(--border-color)]">
+          <button id="btn-cancel-upload" class="btn-secondary px-4 py-2 rounded-xl text-xs font-medium">
+            Cancel
+          </button>
+          <button id="btn-submit-upload" class="btn-primary px-5 py-2.5 rounded-xl text-xs font-bold">
+            Upload & Index
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL 2: DOCUMENT VIEWER / READER MODAL (PHASE 9A) -->
+  <!-- ========================================================================= -->
+  <div id="modal-reader" class="fixed inset-0 z-50 hidden bg-black/60 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="arctic-card rounded-2xl w-full max-w-5xl h-[88vh] flex flex-col overflow-hidden shadow-2xl relative">
+      
+      <div class="h-14 px-5 border-b border-[var(--border-color)] bg-[var(--surface-primary)] flex items-center justify-between shrink-0">
+        <div class="flex items-center space-x-3">
+          <div class="w-8 h-8 rounded-lg bg-[var(--surface-secondary)] text-[var(--primary-accent)] flex items-center justify-center font-bold">
+            <i data-lucide="book-open" class="w-4 h-4"></i>
+          </div>
+          <div>
+            <div id="reader-title" class="text-xs font-bold text-[var(--text-primary)]">Document Reader</div>
+            <div id="reader-meta" class="text-[10px] text-[var(--text-secondary)] font-mono">Loading metadata...</div>
+          </div>
+        </div>
+
+        <div class="flex items-center space-x-3">
+          <a id="reader-download-link" href="#" target="_blank" class="px-3 py-1.5 rounded-lg bg-[var(--surface-secondary)] border border-[var(--border-color)] text-xs font-mono text-[var(--primary-accent)] hover:bg-[var(--surface-tertiary)] flex items-center gap-1.5 transition-colors">
+            <i data-lucide="download" class="w-3.5 h-3.5"></i>
+            <span>Download PDF</span>
+          </a>
+          <button id="btn-close-reader" class="text-[var(--text-muted)] hover:text-[var(--text-primary)] p-1 transition-colors">
+            <i data-lucide="x" class="w-5 h-5"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="flex-1 bg-[var(--bg-main)] relative overflow-hidden flex">
+        <iframe id="reader-iframe" class="w-full h-full border-none" src="about:blank"></iframe>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Core JavaScript Application Controller -->
+  <script src="/static/js/app.js"></script>
+  <script>lucide.createIcons();</script>
+
+</body>
+</html>

@@ -1,0 +1,19 @@
+<!-- Forwarding / Mirror for DocMind Application -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>DocMind — Redirecting...</title>
+  <script>
+    // Redirect / to / if visited as landing, or load app
+    if (window.location.pathname === '/') {
+      window.location.replace('/');
+    } else {
+      window.location.replace('/app');
+    }
+  </script>
+</head>
+<body style="background:#08090E; color:white; font-family:sans-serif; display:flex; align-items:center; justify-content:center; height:100vh;">
+  <p>Loading DocMind Studio... <a href="/app" style="color:#8B5CF6;">Click here if not redirected</a>.</p>
+</body>
+</html>

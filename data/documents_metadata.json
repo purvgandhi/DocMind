@@ -1,0 +1,26 @@
+{
+  "da7a3671-f80a-4370-9ac1-14fde47b59aa": {
+    "id": "da7a3671-f80a-4370-9ac1-14fde47b59aa",
+    "filename": "docmind_architecture_guide.pdf",
+    "contentType": "application/pdf",
+    "fileSize": 3492,
+    "totalPages": 2,
+    "totalChunks": 5,
+    "status": "COMPLETED",
+    "errorMessage": null,
+    "createdAt": "2026-10-26T11:50:22.113249",
+    "updatedAt": "2026-10-26T11:50:22.271886"
+  },
+  "907b9d83-6c31-4782-a710-80eb08f2e3e2": {
+    "id": "907b9d83-6c31-4782-a710-80eb08f2e3e2",
+    "filename": "sample_ai_research.pdf",
+    "contentType": "application/pdf",
+    "fileSize": 4267,
+    "totalPages": 2,
+    "totalChunks": 7,
+    "status": "COMPLETED",
+    "errorMessage": null,
+    "createdAt": "2026-10-26T12:33:58.469114",
+    "updatedAt": "2026-10-26T12:33:58.704214"
+  }
+}

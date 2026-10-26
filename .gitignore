@@ -1,0 +1,37 @@
+# Security & Sensitive Keys (DO NOT EXPOSE)
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+*.token
+credentials.json
+client_secret*.json
+
+# Python & Caches
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.coverage
+htmlcov/
+dist/
+build/
+*.egg-info/
+.venv/
+env/
+venv/
+
+# Uploads & Runtime Vector Stores
+data/uploads/*
+!data/uploads/.gitkeep
+data/indices/*
+!data/indices/.gitkeep
+data/eval_indices/*
+
+# OS & Editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

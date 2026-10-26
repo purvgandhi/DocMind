@@ -1,0 +1,103 @@
+{
+  "benchmark_dataset": "sample_ai_research.pdf (Lewis et al. RAG NeurIPS 2020)",
+  "embedding_provider": "sentence_transformer",
+  "total_test_queries": 5,
+  "retrieval_recall_at_5": "80.0%",
+  "citation_page_accuracy": "60.0%",
+  "grounding_faithfulness": "80.0%",
+  "mean_latency_ms": "32.2 ms",
+  "results": [
+    {
+      "test_id": 1,
+      "question": "What is the core problem statement addressed by Retrieval-Augmented Generation?",
+      "expected_page": 1,
+      "expected_answer": "Large parametric language models suffer from hallucinations, inability to dynamically update knowledge without retraining, and lack of verifiable provenance/citations.",
+      "actual_answer": "Based on Page 1, Page 2 of the document:\n\nRetrieval-Augmented Generation for Knowledge-Intensive NLP Tasks\nPatrick Lewis, Ethan Perez, Aleksandra Piktus, Fabio Petroni, Vladimir Karpukhin\nFacebook AI Research (FAIR), University College London, New York University\nABSTRACT\nLarge pre-trained language models store substantial amounts of factual knowledge in their model parameters. INTRODUCTION & PROBLEM STATEMENT\nLarge language models trained purely on text prediction (parametric models) parameterize world knowledge within millions o\n- Inability to dynamically update knowledge without costly end-to-end retraining.\n\n**Source Provenance:** Grounded in 5 retrieved passage(s) (Page 1, Page 2, Top Similarity Score: 0.5913).",
+      "top_page": 1,
+      "top_similarity": 0.5913,
+      "retrieval_hit": true,
+      "terms_matched": [
+        "parametric",
+        "knowledge"
+      ],
+      "citation_correct": true,
+      "answer_grounded": true,
+      "latency_ms": 9,
+      "citations_count": 5
+    },
+    {
+      "test_id": 2,
+      "question": "What neural architectures form the retriever and the generator in RAG?",
+      "expected_page": 1,
+      "expected_answer": "Dense Passage Retriever (DPR) bi-encoder for dense passage retrieval and BART-large for sequence-to-sequence parametric generation.",
+      "actual_answer": "Based on Page 1, Page 2 of the document:\n\nSYSTEM ARCHITECTURE & MATHEMATICAL FORMULATION\nThe RAG pipeline operates via two fundamental components:\n- Dense Passage Retriever (DPR): A bi-encoder architecture mapping query x and document chunk z to dense vector embe\n  sim(q, d) = <E_q(x), E_d(z)>\n  The probability of selecting document chunk z given query x is:\n  p(z|x) = exp(sim(q, d)) / sum_j(exp(sim(q, d_j)))\n- Parametric Generator: A sequence-to-sequence BART-large model generating target tokens conditioned on the input quer ts, DocMind implements the RAG framework, establishing a hybrid architecture combining parametric\n2. CHALLENGES, LIMITATIONS, AND DISCUSSION\nDespite strong empirical gains, practical deployment highlights several remaining challenges:\n- Retrieval Latency: High latency from vector index lookup and neural encoding during online user queries. - Contradictory Evidence: When retrieved passages contain conflicting information, generative models may synthesize blend\n- Interpretability and Source Grounding: Verifying that each claim in the generated answer strictly originates from the cited c\n\n**Source Provenance:** Grounded in 5 retrieved passage(s) (Page 1, Page 2, Top Similarity Score: 0.5021).",
+      "top_page": 1,
+      "top_similarity": 0.5021,
+      "retrieval_hit": true,
+      "terms_matched": [
+        "Dense Passage Retriever",
+        "DPR",
+        "bi-encoder"
+      ],
+      "citation_correct": true,
+      "answer_grounded": true,
+      "latency_ms": 127,
+      "citations_count": 5
+    },
+    {
+      "test_id": 3,
+      "question": "What empirical Exact Match score did RAG attain on the Natural Questions benchmark?",
+      "expected_page": 2,
+      "expected_answer": "RAG attained 44.5% Exact Match on Natural Questions, outperforming closed-book T5-11B (34.5%) by 10.0 points.",
+      "actual_answer": "Based on Page 1, Page 2 of the document:\n\nEMPIRICAL RESULTS & METRICS\nEvaluation was conducted using Exact Match (EM) accuracy and Token F1-score:\n- Natural Questions: RAG achieved 44.5% Exact Match, outperforming closed-book T5-11B (34.5%) by 10.0 points. - WebQuestions: RAG attained 45.2% Exact Match. - TriviaQA: RAG attained 56.8% Exact Match, surpassing REALM (40.4%) and baseline models. EXPERIMENTAL DATASETS & BENCHMARKS\nWe evaluated the framework on standard knowledge-intensive question answering datasets:\n- Natural Questions (NQ): Google search queries with human-annotated answers from Wikipedia.\n\n**Source Provenance:** Grounded in 5 retrieved passage(s) (Page 1, Page 2, Top Similarity Score: 0.5696).",
+      "top_page": 2,
+      "top_similarity": 0.5696,
+      "retrieval_hit": true,
+      "terms_matched": [
+        "Natural Questions",
+        "44.5%",
+        "Exact Match",
+        "T5-11B"
+      ],
+      "citation_correct": true,
+      "answer_grounded": true,
+      "latency_ms": 8,
+      "citations_count": 5
+    },
+    {
+      "test_id": 4,
+      "question": "How do RAG-Sequence and RAG-Token formulations differ in generating tokens?",
+      "expected_page": 2,
+      "expected_answer": "RAG-Sequence conditions the entire generated sequence on a single retrieved passage, whereas RAG-Token marginalizes across different passages at each token step.",
+      "actual_answer": "Based on Page 1, Page 2 of the document:\n\nTRAINING, CHUNKING, AND MARGINALIZATION\nThe document corpus is segmented into non-overlapping or sliding-window overlapping text chunks of 100 to 200 words (ap\nTwo formulation variants are supported:\n- RAG-Sequence: The model selects a single retrieved document chunk to condition the entire generated sequence y:\n  p_RAG-Seq(y|x) = sum_{z in Top-k} p(z|x) * prod_{t} p(y_t | x, z, y_{1:t-1})\n- RAG-Token: The model marginalizes across different retrieved chunks at each individual token step, allowing multi-docum\n4. SYSTEM ARCHITECTURE & MATHEMATICAL FORMULATION\nThe RAG pipeline operates via two fundamental components:\n- Dense Passage Retriever (DPR): A bi-encoder architecture mapping query x and document chunk z to dense vector embe\n  sim(q, d) = <E_q(x), E_d(z)>\n  The probability of selecting document chunk z given query x is:\n  p(z|x) = exp(sim(q, d)) / sum_j(exp(sim(q, d_j)))\n- Parametric Generator: A sequence-to-sequence BART-large model generating target tokens conditioned on the input quer\n\n**Source Provenance:** Grounded in 5 retrieved passage(s) (Page 1, Page 2, Top Similarity Score: 0.4706).",
+      "top_page": 1,
+      "top_similarity": 0.4706,
+      "retrieval_hit": true,
+      "terms_matched": [
+        "RAG-Sequence",
+        "token"
+      ],
+      "citation_correct": false,
+      "answer_grounded": true,
+      "latency_ms": 7,
+      "citations_count": 5
+    },
+    {
+      "test_id": 5,
+      "question": "What practical deployment challenges and limitations are highlighted for RAG?",
+      "expected_page": 2,
+      "expected_answer": "Retrieval latency, chunk boundary alignment, handling contradictory evidence, and verifying source grounding/interpretability.",
+      "actual_answer": "Based on Page 1, Page 2 of the document:\n\nts, DocMind implements the RAG framework, establishing a hybrid architecture combining parametric\n2. SYSTEM ARCHITECTURE & MATHEMATICAL FORMULATION\nThe RAG pipeline operates via two fundamental components:\n- Dense Passage Retriever (DPR): A bi-encoder architecture mapping query x and document chunk z to dense vector embe\n  sim(q, d) = <E_q(x), E_d(z)>\n  The probability of selecting document chunk z given query x is:\n  p(z|x) = exp(sim(q, d)) / sum_j(exp(sim(q, d_j)))\n- Parametric Generator: A sequence-to-sequence BART-large model generating target tokens conditioned on the input quer EMPIRICAL RESULTS & METRICS\nEvaluation was conducted using Exact Match (EM) accuracy and Token F1-score:\n- Natural Questions: RAG achieved 44.5% Exact Match, outperforming closed-book T5-11B (34.5%) by 10.0 points. - TriviaQA: RAG attained 56.8% Exact Match, surpassing REALM (40.4%) and baseline models.\n\n**Source Provenance:** Grounded in 5 retrieved passage(s) (Page 1, Page 2, Top Similarity Score: 0.2450).",
+      "top_page": 1,
+      "top_similarity": 0.245,
+      "retrieval_hit": false,
+      "terms_matched": [
+        "Retrieval Latency"
+      ],
+      "citation_correct": false,
+      "answer_grounded": false,
+      "latency_ms": 10,
+      "citations_count": 5
+    }
+  ]
+}

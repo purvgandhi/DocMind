@@ -1,0 +1,57 @@
+
+        <!DOCTYPE html><html><head><meta charset='utf-8'><title>DocMind Evaluation</title>
+        <script src='https://cdn.tailwindcss.com'></script></head>
+        <body class='bg-[#0f172a] text-slate-100 p-8 font-sans'>
+          <div class='max-w-4xl mx-auto bg-slate-900 border border-slate-800 rounded-2xl p-8 space-y-6 shadow-2xl'>
+            <div class='flex items-center justify-between border-b border-slate-800 pb-4'>
+              <div>
+                <span class='px-2.5 py-1 rounded-full bg-indigo-500/20 text-indigo-400 text-xs font-semibold border border-indigo-500/30'>AI Laboratory Experiment 10</span>
+                <h1 class='text-2xl font-bold text-white mt-2'>DocMind RAG System Benchmark Evaluation</h1>
+                <p class='text-xs text-slate-400 mt-1'>Evaluated on sample_ai_research.pdf (Lewis et al., NeurIPS 2020) using dense neural embeddings.</p>
+              </div>
+              <div class='text-right'>
+                <div class='text-xs text-slate-400'>Model Architecture</div>
+                <div class='text-sm font-semibold text-indigo-300'>DPR + BART-large / all-MiniLM-L6-v2</div>
+              </div>
+            </div>
+            <div class='grid grid-cols-4 gap-4'>
+              <div class='bg-slate-950 p-4 rounded-xl border border-slate-800 text-center'>
+                <div class='text-xs text-slate-400'>Recall@5</div>
+                <div class='text-2xl font-bold text-emerald-400 mt-1'>80.0%</div>
+                <div class='text-[10px] text-slate-500'>Passage Retrieval Rate</div>
+              </div>
+              <div class='bg-slate-950 p-4 rounded-xl border border-slate-800 text-center'>
+                <div class='text-xs text-slate-400'>Citation Acc.</div>
+                <div class='text-2xl font-bold text-indigo-400 mt-1'>60.0%</div>
+                <div class='text-[10px] text-slate-500'>Exact Page Alignment</div>
+              </div>
+              <div class='bg-slate-950 p-4 rounded-xl border border-slate-800 text-center'>
+                <div class='text-xs text-slate-400'>Source Grounding</div>
+                <div class='text-2xl font-bold text-purple-400 mt-1'>80.0%</div>
+                <div class='text-[10px] text-slate-500'>Zero-Hallucination Rate</div>
+              </div>
+              <div class='bg-slate-950 p-4 rounded-xl border border-slate-800 text-center'>
+                <div class='text-xs text-slate-400'>Mean Latency</div>
+                <div class='text-2xl font-bold text-amber-400 mt-1'>32.2 ms</div>
+                <div class='text-[10px] text-slate-500'>End-to-End Processing</div>
+              </div>
+            </div>
+            <div class='overflow-x-auto'>
+              <table class='w-full text-xs text-left border-collapse'>
+                <thead>
+                  <tr class='border-b border-slate-800 text-slate-400 uppercase tracking-wider text-[11px] bg-slate-950/60'>
+                    <th class='p-3'>Test #</th><th class='p-3'>Benchmark Query</th><th class='p-3'>Target Page</th><th class='p-3'>Recall@5</th><th class='p-3'>Citation</th><th class='p-3'>Latency</th>
+                  </tr>
+                </thead>
+                <tbody class='divide-y divide-slate-800/60 font-normal'>
+                  <tr><td class='p-3 font-mono text-indigo-400 font-bold'>#1</td><td class='p-3'>Core problem statement addressed by RAG</td><td class='p-3'>Page 1</td><td class='p-3 text-emerald-400 font-semibold'>PASS</td><td class='p-3 text-emerald-400 font-semibold'>EXACT</td><td class='p-3 font-mono text-slate-400'>9 ms</td></tr>
+                  <tr><td class='p-3 font-mono text-indigo-400 font-bold'>#2</td><td class='p-3'>Neural architectures in DPR and generator</td><td class='p-3'>Page 1</td><td class='p-3 text-emerald-400 font-semibold'>PASS</td><td class='p-3 text-emerald-400 font-semibold'>EXACT</td><td class='p-3 font-mono text-slate-400'>127 ms</td></tr>
+                  <tr><td class='p-3 font-mono text-indigo-400 font-bold'>#3</td><td class='p-3'>Exact Match score on Natural Questions</td><td class='p-3'>Page 2</td><td class='p-3 text-emerald-400 font-semibold'>PASS</td><td class='p-3 text-emerald-400 font-semibold'>EXACT</td><td class='p-3 font-mono text-slate-400'>8 ms</td></tr>
+                  <tr><td class='p-3 font-mono text-indigo-400 font-bold'>#4</td><td class='p-3'>RAG-Sequence vs RAG-Token differences</td><td class='p-3'>Page 2</td><td class='p-3 text-emerald-400 font-semibold'>PASS</td><td class='p-3 text-amber-400 font-semibold'>MISMATCH</td><td class='p-3 font-mono text-slate-400'>7 ms</td></tr>
+                  <tr><td class='p-3 font-mono text-indigo-400 font-bold'>#5</td><td class='p-3'>Practical deployment challenges & limitations</td><td class='p-3'>Page 2</td><td class='p-3 text-slate-400 font-semibold'>FAIL</td><td class='p-3 text-amber-400 font-semibold'>MISMATCH</td><td class='p-3 font-mono text-slate-400'>10 ms</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </body></html>
+        
